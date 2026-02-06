@@ -29,7 +29,17 @@ DEBUG = True
 
 
 # Consenti tutte le origini e host per sviluppo
-ALLOWED_HOSTS = ['*']
+import os
+
+# Ottieni il nome del Codespace dalla variabile d'ambiente
+CODESPACE_NAME = os.environ.get('CODESPACE_NAME')
+
+# Costruisci il dominio Codespace se la variabile è presente
+codespace_host = f"{CODESPACE_NAME}-8000.app.github.dev" if CODESPACE_NAME else None
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+if codespace_host:
+    ALLOWED_HOSTS.append(codespace_host)
 
 # CORS settings
 CORS_ALLOW_ALL_ORIGINS = True
@@ -96,10 +106,6 @@ DATABASES = {
         'CLIENT': {
             'host': 'localhost',
             'port': 27017,
-            'username': '',
-            'password': '',
-            'authSource': 'admin',
-            'authMechanism': 'SCRAM-SHA-1',
         },
     }
 }
